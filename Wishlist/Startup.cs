@@ -56,7 +56,7 @@ namespace Wishlist
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Wishes}/{action=Index}/{id?}");
             });
         }
     }

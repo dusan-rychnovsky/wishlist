@@ -1,92 +1,25 @@
 ﻿@{
+    @model WishViewModel[]
     ViewData["Title"] = "Seznam přání";
 }
 
 <h1 class="text-center">Seznam přání</h1>
 
-<div class="wish">
-    <a href="~/images/items/ostre-konce-orig.jpg" class="photo">
-        <img src="~/images/items/ostre-konce.jpg" />
-    </a>
-    Kniha
-    <h2>Joe Abercrombie - Ostre konce</h2>
-    <p>Sbirka povidek. Muze byt tistena kniha nebo e-book ve formatu pro Kindle (.mobi, .pdf).</p>
-    Odkaz: <a href="https://www.amazon.com/Sharp-Ends-Stories-World-First/dp/0316390828" target="_blank">Amazon</a><br />
-    Odkaz: <a href="https://luxor.cz/beletrie/ostre-konce--295088" target="_blank">Luxor</a><br />
-    Cena: $ 7.32 / 314 Kc<br />
-    <div class="clearfix"></div>
-</div>
-
-<div class="wish">
-    <a href="~/images/items/feel-better-in-5-orig.jpg" class="photo">
-        <img src="~/images/items/feel-better-in-5.jpg" />
-    </a>
-    Kniha
-    <h2>Dr Rangan Chatterjee - Feel Better in 5</h2>
-    <p>Popularne naucna kniha. Muze byt tistena nebo e-book ve formatu pro Kindle (.mobi, .pdf).</p>
-    Odkaz: <a href="https://www.amazon.co.uk/Feel-Better-daily-supercharge-health/dp/0241397804" target="_blank">Amazon</a><br />
-    Cena: £ 9.99 / £ 13.99<br />
-    <div class="clearfix"></div>
-</div>
-
-
-<div class="wish">
-    <a href="~/images/items/sluchatka-xiaomi-orig.jpg" class="photo">
-        <img src="~/images/items/sluchatka-xiaomi.jpg" />
-    </a>
-    Klasicka sluchatka
-    <h2>Xiaomi Mi In-Ear cerna</h2>
-    <p></p>
-    Odkaz: <a href="https://www.alza.cz/xiaomi-mi-in-ear-headphones-basic-black-d5261089.htm" target="_blank">Alza</a><br />
-    Cena: 249 Kc<br />
-    <div class="clearfix"></div>
-</div>
-
-<div class="wish">
-    <a href="~/images/items/bezdratova-sluchatka-qcy-orig.jpg" class="photo">
-        <img src="~/images/items/bezdratova-sluchatka-qcy.jpg" />
-    </a>
-    Bezdratova sluchatka
-    <h2>QCY T1C cerna</h2>
-    <p></p>
-    Odkaz: <a href="https://www.alza.cz/qcy-t1c-cerna-d5505954.htm" target="_blank">Alza</a><br />
-    Cena: 990 Kc<br />
-    <div class="clearfix"></div>
-</div>
-
-<div class="wish">
-    <a href="~/images/items/screen-shield-a5-orig.jpg" class="photo">
-        <img src="~/images/items/screen-shield-a5.jpg" />
-    </a>
-    Ochranna folie
-    <h2>ScreenShield pro Samsung Galaxy A5</h2>
-    <p>Ochrana folie na telefon. Mozno sehnat i skrz AliExpress.</p>
-    Odkaz: <a href="https://www.alza.cz/screenshield-pro-samsung-galaxy-a5-na-displej-telefonu-d2357397.htm" target="_blank">Alza</a><br />
-    Cena: 299 Kc<br />
-    <div class="clearfix"></div>
-</div>
-
-<div class="wish">
-    <a href="~/images/items/mlynek-na-kavu-orig.jpg" class="photo">
-        <img src="~/images/items/mlynek-na-kavu.jpg" />
-    </a>
-    Mlynek na kavu
-    <h2>Hario Mini Mill Slim</h2>
-    <p>Malicky rucni mlynek na kavu s keramickymi kameny.</p>
-    Odkaz: <a href="https://www.cerstvakava.cz/1075-rucni-mlynek-na-kavu-hario-mini-mill-slim-mss-1b/" target="_blank">Cerstva kava</a><br />
-    Cena: 899 Kc
-    <div class="clearfix"></div>
-</div>
-
-<div class="wish">
-    <a href="~/images/items/souprava-pro-kvaseni-tescoma-orig.jpg" class="photo">
-        <img src="~/images/items/souprava-pro-kvaseni-tescoma.jpg" />
-    </a>
-    Souprava pro kvaseni
-    <h2>Tescoma DELLA CASA 5000 ml</h2>
-    <p>Souprava pro kvaseni obsahujici 5l sklenici, vzduchotesne vicko a zavazi. Zavazi je treba koupit samostatne.</p>
-    Odkaz sklenice: <a href="https://eshop.tescoma.cz/souprava-pro-kvaseni-della-casa-5000-ml" target="_blank">Tescoma</a><br />
-    Odkaz zavazi: <a href="https://eshop.tescoma.cz/zavazi-pro-kvaseni-della-casa-3-ks" target="_blank">Tescoma</a><br />
-    Cena: 399 + 299 Kc<br />
-    <div class="clearfix"></div>
-</div>
+@foreach (var wish in Model)
+{
+    <div class="wish">
+        <a href="~/images/items/@(wish.Image)-orig.jpg" class="photo">
+            <img src="~/images/items/@(wish.Image).jpg" />
+        </a>
+        @wish.SubTitle
+        <h2>@wish.Title</h2>
+        <p>@wish.Description</p>
+        @foreach (var link in wish.Links)
+        {
+            <span>Odkaz:</span>
+            <a href="@link.Url" target="_blank">@link.Text</a><br />
+        }
+        Cena: @wish.Price<br />
+        <div class="clearfix"></div>
+    </div>
+}

@@ -11,15 +11,17 @@
         <a href="~/images/items/@(wish.Image)-orig.jpg" class="photo">
             <img src="~/images/items/@(wish.Image).jpg" />
         </a>
-        @wish.SubTitle
-        <h2>@wish.Title</h2>
-        <p>@wish.Description</p>
-        @foreach (var link in wish.Links)
-        {
-            <span>Odkaz:</span>
-            <a href="@link.Url" target="_blank">@link.Text</a><br />
-        }
-        Cena: @wish.Price<br />
+        <div class="float-left">
+            @wish.SubTitle
+            <h2>@wish.Title</h2>
+            <p>@wish.Description</p>
+            @foreach (var link in wish.Links)
+            {
+                <span>Odkaz:</span>
+                <a href="@link.Url" target="_blank">@link.Text</a><br />
+            }
+            Cena: @wish.Price<br />
+        </div>
         <div class="clearfix"></div>
     </div>
 }

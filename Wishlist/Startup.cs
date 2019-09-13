@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Wishlist.Identity;
 using Wishlist.Models;
 
 namespace Wishlist
@@ -34,29 +36,46 @@ namespace Wishlist
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            var cosmosDbConfig = Configuration.GetSection("CosmosDb");
+            var cosmosDbClient = InitializeCosmosDbClient(cosmosDbConfig);
+
+            services.AddAuthentication();
+
+            var builder = services.AddIdentity<ApplicationUser, ApplicationRole>();
+            services.AddSingleton(
+                typeof(IUserStore<>).MakeGenericType(builder.UserType),
+                InitializeCosmosDbUserStore(cosmosDbClient, cosmosDbConfig));
+            services.AddSingleton(
+                typeof(IRoleStore<>).MakeGenericType(builder.RoleType),
+                typeof(CosmosDbRoleStore));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            var cosmosDbConfig = Configuration.GetSection("CosmosDb");
-            services.AddSingleton(InitializeWishServiceAsync(cosmosDbConfig));
+            services.AddSingleton(InitializeWishServiceAsync(cosmosDbClient, cosmosDbConfig));
         }
 
-        private static IWishService InitializeWishServiceAsync(IConfigurationSection config)
+        private static CosmosDbUserStore InitializeCosmosDbUserStore(CosmosClient client, IConfigurationSection config)
         {
-            string databaseName = config.GetSection("DatabaseName").Value;
-            string containerName = config.GetSection("ContainerName").Value;
-            string account = config.GetSection("Account").Value;
-            string key = config.GetSection("Key").Value;
+            return new CosmosDbUserStore(
+                client,
+                config.GetSection("DatabaseName").Value,
+                config.GetSection("UsersContainerName").Value);
+        }
 
-            CosmosClientBuilder clientBuilder = new CosmosClientBuilder(account, key);
-            CosmosClient client = clientBuilder
-                                .WithConnectionModeDirect()
-                                .Build();
+        private static CosmosClient InitializeCosmosDbClient(IConfigurationSection config)
+        {
+            var clientBuilder = new CosmosClientBuilder(
+                config.GetSection("Account").Value,
+                config.GetSection("Key").Value);
+            return clientBuilder.WithConnectionModeDirect().Build();
+        }
 
-            // Database database = await client.CreateDatabaseIfNotExistsAsync(databaseName);
-            // await database.CreateContainerIfNotExistsAsync(containerName, "/id");
-
-            return new WishService(client, databaseName, containerName);
+        private static IWishService InitializeWishServiceAsync(CosmosClient client, IConfigurationSection config)
+        {
+            return new WishService(
+                client,
+                config.GetSection("DatabaseName").Value,
+                config.GetSection("WishesContainerName").Value);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -75,6 +94,8 @@ namespace Wishlist
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

@@ -12,3 +12,14 @@
     float: left;
     margin: 1rem;
 }
+
+#login-box {
+    border: 2px black solid;
+    margin: 0px auto;
+    width: 300px;
+}
+
+#login-box ul {
+    list-style-type: none;
+    margin-top: 10px;
+}

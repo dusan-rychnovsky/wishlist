@@ -2,11 +2,13 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Wishlist.Models;
 
 namespace Wishlist.Controllers
 {
+    [Authorize]
     public sealed class WishesController : Controller
     {
         private readonly IWishService wishService;

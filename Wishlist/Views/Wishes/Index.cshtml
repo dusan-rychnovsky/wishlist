@@ -8,8 +8,8 @@
 @foreach (var wish in Model)
 {
     <div class="wish">
-        <a href="~/images/items/@(wish.Image)-orig.jpg" class="photo">
-            <img src="~/images/items/@(wish.Image).jpg" />
+        <a href="~/images/items/@(wish.Id)-orig.jpg" class="photo">
+            <img src="~/images/items/@(wish.Id).jpg" />
         </a>
         <div class="float-left">
             @wish.SubTitle

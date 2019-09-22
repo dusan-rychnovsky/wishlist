@@ -29,10 +29,10 @@ namespace Wishlist.Controllers
         {
             return new WishViewModel
             {
+                Id = wish.Id,
                 Title = wish.Title,
                 SubTitle = wish.SubTitle,
                 Description = wish.Description,
-                Image = wish.Image,
                 Links = wish.Links.Select(link => new WishViewModel.Link
                 {
                     Text = link.Text,

@@ -9,6 +9,9 @@ namespace Wishlist.Models
 {
     public sealed class Wish
     {
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
         [JsonProperty(PropertyName = "title")]
         public string Title { get; set; }
 

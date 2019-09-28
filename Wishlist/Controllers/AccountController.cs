@@ -21,8 +21,8 @@ namespace Wishlist.Controllers
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
         {
-            ViewData["ReturnUrl"] = returnUrl;
-            return View();
+            this.ViewData["ReturnUrl"] = returnUrl;
+            return this.View();
         }
 
         [HttpPost]
@@ -30,22 +30,32 @@ namespace Wishlist.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LogInViewModel model, string returnUrl = null)
         {
-            var user = new ApplicationUser { Email = VIEWER_EMAIL };
-            
-            ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
+            this.ViewData["ReturnUrl"] = returnUrl;
+            if (this.ModelState.IsValid)
             {
                 var result = await this.signInManager.PasswordSignInAsync(VIEWER_EMAIL, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
-                    return this.Redirect(returnUrl);
+                    return this.RedirectToLocal(returnUrl);
                 }
 
                 ModelState.AddModelError(string.Empty, "Neplatné heslo.");
-                return View(model);
+                return this.View(model);
             }
 
-            return View(model);
+            return this.View(model);
+        }
+
+        private IActionResult RedirectToLocal(string url)
+        {
+            if (Url.IsLocalUrl(url))
+            {
+                return this.Redirect(url);
+            }
+            else
+            {
+                return this.Redirect("/");
+            }
         }
     }
 }

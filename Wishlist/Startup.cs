@@ -19,6 +19,8 @@ namespace Wishlist
 {
     public class Startup
     {
+        public const string IS_ADMIN_AUTH_POLICY = "IsAdmin";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -40,6 +42,12 @@ namespace Wishlist
             var cosmosDbClient = InitializeCosmosDbClient(cosmosDbConfig);
 
             services.AddAuthentication();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(
+                    IS_ADMIN_AUTH_POLICY,
+                    policy => policy.RequireClaim("IsAdmin"));
+            });
 
             var builder = services.AddIdentity<ApplicationUser, ApplicationRole>();
             services.AddSingleton(

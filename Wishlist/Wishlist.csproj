@@ -12,4 +12,10 @@
     <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\Admin\Login.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+  </ItemGroup>
+
 </Project>

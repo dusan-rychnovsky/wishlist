@@ -21,9 +21,6 @@ namespace Wishlist.Models
         [JsonProperty(PropertyName = "description")]
         public string Description { get; set; }
 
-        [JsonProperty(PropertyName = "image")]
-        public string Image { get; set; }
-
         [JsonProperty(PropertyName = "links")]
         public Link[] Links { get; set; }
 

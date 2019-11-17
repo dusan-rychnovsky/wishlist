@@ -23,5 +23,10 @@ namespace Wishlist.Models
             }
             return result;
         }
+
+        public Task CreateWishAsync(Wish wish)
+        {
+            return this.container.CreateItemAsync(wish, new PartitionKey(wish.Id));
+        }
     }
 }

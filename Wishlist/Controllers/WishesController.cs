@@ -42,6 +42,50 @@ namespace Wishlist.Controllers
             };
         }
 
+        public IActionResult New()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> New(WishViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            RemoveEmptyLinks(model);
+
+            await this.wishService.CreateWishAsync(this.ToWish(model));
+
+            return this.RedirectToAction("Index");
+        }
+
+        private static void RemoveEmptyLinks(WishViewModel model)
+        {
+            model.Links = model.Links
+                .Where(link => !string.IsNullOrEmpty(link.Url))
+                .ToArray();
+        }
+
+        private Wish ToWish(WishViewModel model)
+        {
+            return new Wish
+            {
+                Id = model.Id,
+                Title = model.Title,
+                SubTitle = model.SubTitle,
+                Description = model.Description,
+                Links = model.Links.Select(link => new Wish.Link
+                {
+                    Text = link.Text,
+                    Url = link.Url
+                }).ToArray(),
+                Price = model.Price
+            };
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

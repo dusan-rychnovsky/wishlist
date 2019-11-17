@@ -6,5 +6,7 @@ namespace Wishlist.Models
     public interface IWishService
     {
         Task<IEnumerable<Wish>> GetAllWishesAsync();
+
+        Task CreateWishAsync(Wish wish);
     }
 }

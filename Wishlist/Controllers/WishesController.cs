@@ -42,12 +42,14 @@ namespace Wishlist.Controllers
             };
         }
 
+        [Authorize(Startup.IS_ADMIN_AUTH_POLICY)]
         public IActionResult New()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Startup.IS_ADMIN_AUTH_POLICY)]
         public async Task<IActionResult> New(WishViewModel model)
         {
             if (!ModelState.IsValid)

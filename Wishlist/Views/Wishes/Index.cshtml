@@ -3,14 +3,11 @@
     ViewData["Title"] = "Seznam přání";
 }
 
-@if (ViewContext.HttpContext.User.HasClaim("IsAdmin", "true"))
-{
-    <div class="row mt-1 mb-1">
-        <div class="col-12">
-            <a asp-action="New" class="btn btn-secondary float-right">Přidat</a>
-        </div>
+<div asp-claim="IsAdmin" class="row mt-1 mb-1">
+    <div class="col-12">
+        <a asp-action="New" class="btn btn-secondary float-right">Přidat</a>
     </div>
-}
+</div>
 
 <h1 class="text-center">Seznam přání</h1>
 

@@ -14,8 +14,8 @@
 @foreach (var wish in Model)
 {
     <div class="wish">
-        <a href="@Url.Action("Get", "Images", new { id = wish.Id + "-orig.jpg" })" class="photo">
-            <img src="@Url.Action("Get", "Images", new { id = wish.Id + ".jpg" })" />
+        <a href="@Url.Action("Get", "Images", new { id = wish.ImageFilename })" class="photo">
+            <img src="@Url.Action("Get", "Images", new { id = wish.ThumbnailImageFilename })" />
         </a>
         <div class="float-left" style="max-width: 800px;">
             @wish.SubTitle

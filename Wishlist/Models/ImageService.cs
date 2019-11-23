@@ -18,5 +18,10 @@ namespace Wishlist.Models
         {
             return this.container.GetBlockBlobReference(id).OpenReadAsync();
         }
+
+        public Task SaveImageAsync(string id, Stream stream)
+        {
+            return this.container.GetBlockBlobReference(id).UploadFromStreamAsync(stream);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace Wishlist.Models
 {
@@ -20,6 +21,18 @@ namespace Wishlist.Models
 
         [Required]
         public string Price { get; set; }
+
+        public string ThumbnailImageFilename => this.Id + ".jpg";
+
+        [Required]
+        [Display(Name = "Thumbnail Image")]
+        public IFormFile ThumbnailImage { get; set; }
+
+        public string ImageFilename => this.Id + "-orig.jpg";
+
+        [Required]
+        [Display(Name = "Image")]
+        public IFormFile Image { get; set; }
 
         public sealed class Link
         {

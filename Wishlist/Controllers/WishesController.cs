@@ -12,10 +12,12 @@ namespace Wishlist.Controllers
     public sealed class WishesController : Controller
     {
         private readonly IWishService wishService;
+        private readonly IImageService imageService;
 
-        public WishesController(IWishService wishService)
+        public WishesController(IWishService wishService, IImageService imageService)
         {
             this.wishService = wishService;
+            this.imageService = imageService;
         }
 
         public async Task<IActionResult> Index()
@@ -59,6 +61,8 @@ namespace Wishlist.Controllers
 
             RemoveEmptyLinks(model);
 
+            await this.imageService.SaveImageAsync(model.ThumbnailImageFilename, model.ThumbnailImage.OpenReadStream());
+            await this.imageService.SaveImageAsync(model.ImageFilename, model.Image.OpenReadStream());
             await this.wishService.CreateWishAsync(this.ToWish(model));
 
             return this.RedirectToAction("Index");

@@ -12,6 +12,8 @@ using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.Cosmos.Fluent;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.WindowsAzure.Storage;
+using Microsoft.WindowsAzure.Storage.Auth;
 using Wishlist.Identity;
 using Wishlist.Models;
 
@@ -59,7 +61,16 @@ namespace Wishlist
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddSingleton(InitializeWishServiceAsync(cosmosDbClient, cosmosDbConfig));
+            services.AddSingleton(InitializeWishService(cosmosDbClient, cosmosDbConfig));
+
+            var blobStorageConfig = Configuration.GetSection("BlobStorage");
+            var blobStorageAccount = InitializeBlobStorageAccount(blobStorageConfig);
+            services.AddSingleton(InitializeImageService(blobStorageAccount, blobStorageConfig));
+        }
+
+        private CloudStorageAccount InitializeBlobStorageAccount(IConfigurationSection config)
+        {
+            return CloudStorageAccount.Parse(config.GetSection("Account").Value);
         }
 
         private static CosmosDbUserStore InitializeCosmosDbUserStore(CosmosClient client, IConfigurationSection config)
@@ -78,11 +89,18 @@ namespace Wishlist
             return clientBuilder.WithConnectionModeDirect().Build();
         }
 
-        private static IWishService InitializeWishServiceAsync(CosmosClient client, IConfigurationSection config)
+        private static IWishService InitializeWishService(CosmosClient client, IConfigurationSection config)
         {
             return new WishService(
                 client,
                 config.GetSection("DatabaseName").Value,
+                config.GetSection("WishesContainerName").Value);
+        }
+
+        private static IImageService InitializeImageService(CloudStorageAccount account, IConfiguration config)
+        {
+            return new ImageService(
+                account,
                 config.GetSection("WishesContainerName").Value);
         }
 

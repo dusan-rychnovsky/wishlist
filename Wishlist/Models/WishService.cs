@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
 
@@ -22,6 +23,11 @@ namespace Wishlist.Models
                 result.AddRange(await query.ReadNextAsync());
             }
             return result;
+        }
+
+        public async Task<IEnumerable<Wish>> GetAllEnabledWishesAsync()
+        {
+            return (await this.GetAllWishesAsync()).Where(wish => !wish.IsDisabled);
         }
 
         public Task CreateWishAsync(Wish wish)

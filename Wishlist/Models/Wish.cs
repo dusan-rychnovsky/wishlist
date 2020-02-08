@@ -27,6 +27,9 @@ namespace Wishlist.Models
         [JsonProperty(PropertyName = "price")]
         public string Price { get; set; }
 
+        [JsonProperty(PropertyName = "disabled")]
+        public bool IsDisabled { get; set; }
+
         public sealed class Link
         {
             [JsonProperty(PropertyName = "text")]

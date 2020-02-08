@@ -7,6 +7,8 @@ namespace Wishlist.Models
     {
         Task<IEnumerable<Wish>> GetAllWishesAsync();
 
+        Task<IEnumerable<Wish>> GetAllEnabledWishesAsync();
+
         Task CreateWishAsync(Wish wish);
     }
 }

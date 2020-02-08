@@ -22,7 +22,7 @@ namespace Wishlist.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var wishes = await this.wishService.GetAllWishesAsync();
+            var wishes = await this.wishService.GetAllEnabledWishesAsync();
             var viewModels = wishes.Select(this.ToViewModel).ToArray();
             return View(viewModels);
         }
